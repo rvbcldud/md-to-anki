@@ -38,7 +38,7 @@ def search_markdown(text, get_cards=True):
     with open(text, 'r') as f:
         md_text = f.read()
         # Finds all card questions and answers
-        card_list = re.findall('(?<=## )(.*)\n\n(?<=\n)(.*)', md_text)
+        card_list = re.findall('\## (.*)\n\n(.*(?:\r?\n(?!\r?\n).*)*)', md_text)
         # Finds the title
         deck_title = re.findall('(?<=# )(.*)', md_text)
 
@@ -61,9 +61,11 @@ def search_markdown(text, get_cards=True):
 
 def add_cards(cards, model, deck):
     for i in cards:
+        note_question = i[0]
+        note_answer = i[1].replace('\n', '<br>')
         note = genanki.Note(
             model=model,
-            fields=[i[0], i[1]])
+            fields=[note_question, note_answer])
         deck.add_note(note)
 
 
