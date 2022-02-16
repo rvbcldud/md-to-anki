@@ -33,7 +33,7 @@ def create_deck(deck_title):
     return my_deck
 
 
-def search_markdown(text, get_cards=True):
+def search_markdown(text):
     # Opens file in order to use a regular expression throughout it
     with open(text, 'r') as f:
         md_text = f.read()
@@ -51,13 +51,7 @@ def search_markdown(text, get_cards=True):
                 if j in deck_title:
                     deck_title.remove(j)
 
-    if get_cards == True:
-        print(card_list)
-        return card_list
-    elif get_cards == False:
-        print(deck_title)
-        return deck_title
-
+    return card_list, deck_title
 
 def add_cards(cards, model, deck):
     for i in cards:
@@ -71,9 +65,7 @@ def add_cards(cards, model, deck):
 
 def export_deck(file_name, pkg_name):
 
-    title = search_markdown(file_name, False)
-    cards = search_markdown(file_name)
+    cards, title = search_markdown(file_name)
     deck = create_deck(title[0])
     add_cards(cards, create_model(), deck)
-
     genanki.Package(deck).write_to_file(pkg_name)
